@@ -23,17 +23,34 @@ function generateWeekTable() {
 
         tableBody.innerHTML += `<tr data-date="${dateKey}" onclick="showDayData('${dateKey}')">
             <td>${date.toLocaleDateString()}</td>
-            <td><input type="number" value="${savedData.amount}" class="daily-amount"></td>
-            <td><input type="number" value="${savedData.expense}" class="daily-expense"></td>
+            <td><input type="number" value="${savedData.amount}" class="daily-amount" onchange="updateWeeklySummary()"></td>
+            <td><input type="number" value="${savedData.expense}" class="daily-expense" onchange="updateWeeklySummary()"></td>
             <td><input type="text" value="${savedData.justification}" class="daily-justification"></td>
         </tr>`;
     }
+
+    updateWeeklySummary();
+}
+
+// 🔍 Fonction pour mettre à jour le résumé hebdomadaire
+function updateWeeklySummary() {
+    let totalAmounts = 0, totalExpenses = 0, totalIncludingExpenses = 0;
+    const amounts = document.querySelectorAll('.daily-amount');
+    const expenses = document.querySelectorAll('.daily-expense');
+
+    amounts.forEach((input, index) => {
+        totalAmounts += parseFloat(input.value) || 0;
+        totalExpenses += parseFloat(expenses[index].value) || 0;
+    });
+
+    totalIncludingExpenses = totalAmounts + totalExpenses;
 
     document.getElementById('weekly-amounts').textContent = totalAmounts.toFixed(2);
     document.getElementById('weekly-expenses').textContent = totalExpenses.toFixed(2);
     document.getElementById('weekly-total').textContent = totalIncludingExpenses.toFixed(2);
 }
 
+// 🔄 Navigation entre les semaines
 function previousWeek() {
     currentWeekStart.setDate(currentWeekStart.getDate() - 7);
     generateWeekTable();
@@ -44,6 +61,7 @@ function nextWeek() {
     generateWeekTable();
 }
 
+// 💾 Sauvegarde des données hebdomadaires
 function saveWeeklyData() {
     const rows = document.querySelectorAll('#daily-table tr');
     const calendarData = JSON.parse(localStorage.getItem('calendarData')) || {};
@@ -61,11 +79,15 @@ function saveWeeklyData() {
     generateCalendar();
 }
 
+// 📅 Génération du calendrier avec les mois affichés
 function generateCalendar() {
     const calendar = document.getElementById('calendar');
     calendar.innerHTML = '';
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     const calendarData = JSON.parse(localStorage.getItem('calendarData')) || {};
+
+    // Mettre à jour le titre du mois et de l'année
+    document.getElementById('month-year').textContent = `${new Date(currentYear, currentMonth).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}`;
 
     for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(currentYear, currentMonth, day);
@@ -83,6 +105,7 @@ function generateCalendar() {
     }
 }
 
+// 📌 Affiche les détails du jour sélectionné
 function showDayData(dateKey) {
     const calendarData = JSON.parse(localStorage.getItem('calendarData')) || {};
     const data = calendarData[dateKey];
@@ -98,6 +121,7 @@ function showDayData(dateKey) {
     }
 }
 
+// 🔄 Navigation entre les mois
 function previousMonth() {
     currentMonth--;
     if (currentMonth < 0) {
@@ -116,6 +140,7 @@ function nextMonth() {
     generateCalendar();
 }
 
+// 🚀 Initialisation à la charge de la page
 window.onload = () => {
     generateWeekTable();
     generateCalendar();
