@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suivi des Recettes de Taxis</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Suivi des Recettes de Taxis</h1>
+    <div class="container">
+        <h2>Gestion des Données Hebdomadaires</h2>
+        <button onclick="previousWeek()">Semaine Précédente</button>
+        <button onclick="nextWeek()">Semaine Suivante</button>
+        <h3 id="week-range"></h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Montant versé</th>
+                    <th>Dépenses</th>
+                    <th>Justification</th>
+                </tr>
+            </thead>
+            <tbody id="daily-table"></tbody>
+        </table>
+        <button onclick="saveWeeklyData()">Enregistrer la semaine</button>
+        <div class="weekly-summary">
+            <h3>Résumé Hebdomadaire</h3>
+            <p>Total des montants versés : <span id="weekly-amounts">0</span> F</p>
+            <p>Total des dépenses : <span id="weekly-expenses">0</span> F</p>
+            <p>Montant total incluant les dépenses : <span id="weekly-total">0</span> F</p>
+        </div>
+
+        <h2>Calendrier Mensuel</h2>
+        <button onclick="previousMonth()">Mois Précédent</button>
+        <button onclick="nextMonth()">Mois Suivant</button>
+        <h3 id="month-year"></h3>
+        <div class="calendar" id="calendar"></div>
+        <div class="day-summary">
+            <h3>Données du Jour Sélectionné</h3>
+            <div id="day-details">Cliquez sur un jour pour voir les détails.</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
